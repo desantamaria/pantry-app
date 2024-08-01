@@ -44,7 +44,7 @@ export default function Home() {
         const oldDocRef = doc(collection(firestore, 'inventory'), oldName)
         const oldDocSnap = await getDoc(oldDocRef)
 
-        if(oldDocSnap.exists()) {
+        if(oldDocSnap.exists() && oldName != newName) {
             const itemData = oldDocSnap.data();
             const newDocRef = doc(collection(firestore, 'inventory'), newName);
     
@@ -52,7 +52,7 @@ export default function Home() {
             await deleteDoc(oldDocRef);    
             await updateInventory();
         } else {
-            console.error('Old Item Name does not exist')
+            console.error('Cannot edit name')
         }
 
     }
@@ -157,6 +157,8 @@ export default function Home() {
                 variant="outlined"
                 onClick={() => {
                     editItem(oldItemName, newItemName)
+                    setOldItemName('')
+                    setNewItemName('')
                     handleEditClose()
                 }}
             >Confirm</Button>
