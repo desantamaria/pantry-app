@@ -13,6 +13,9 @@ export default function Home() {
     const [oldItemName, setOldItemName] = useState('')
     const [newItemName, setNewItemName] = useState('')
 
+    const [searchResults, setSearchResults] = useState([]);
+
+
 
     const updateInventory = async () => {
         const snapshot = query(collection(firestore, 'inventory'))
@@ -25,6 +28,18 @@ export default function Home() {
             })
         })
         setInventory(inventoryList)
+        setSearchResults(inventoryList)
+    }
+
+    const searchItems = (searchInput) => {
+        if(searchInput != '') {
+            const searchData = inventory.filter((item) => 
+                item.name.toLowerCase().includes(searchInput.toLowerCase())
+            )
+            setSearchResults(searchData)
+        } else {
+            setSearchResults(inventory)
+        }
     }
 
     const addItem = async (item) => {
@@ -166,11 +181,28 @@ export default function Home() {
         </Box>
     </Modal>
 
-    <Button variant="contained" onClick={() => {
-        handleOpen()
-    }}>
-        Add New Item
-    </Button>
+    <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        flexDirection="row"
+        gap={3}
+    >
+        <TextField 
+            label="Search Items" 
+            variant="outlined" 
+            onChange={(e)=> {
+                searchItems(e.target.value)
+            }}
+        
+        />
+
+        <Button variant="contained" onClick={() => {
+            handleOpen()
+        }}>
+            Add New Item
+        </Button>
+    </Box>
 
     <Box border="1px solid #333">
         <Box
@@ -190,7 +222,7 @@ export default function Home() {
         spacing={2} 
         overflow="auto"
     >
-        {inventory.map(({name, quantity}) => (
+        {searchResults.map(({name, quantity}) => (
             <Box 
                 key={name} 
                 width="100%"
