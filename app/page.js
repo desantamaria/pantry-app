@@ -1,8 +1,9 @@
 'use client'
 import { useState, useEffect } from "react";
 import { firestore } from "@/firebase";
-import { Box, Button, Modal, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, createTheme, CssBaseline, Modal, Stack, TextField, ThemeProvider, Typography } from "@mui/material";
 import { collection, deleteDoc, doc, getDoc, getDocs, query, setDoc } from "firebase/firestore";
+import { purple } from "@mui/material/colors";
 
 export default function Home() {
     const [inventory, setInventory] = useState([])
@@ -15,7 +16,13 @@ export default function Home() {
 
     const [searchResults, setSearchResults] = useState([]);
 
-
+    const theme = createTheme({
+        palette: {
+            primary: {
+                main: purple[500],
+              }
+        },
+      });
 
     const updateInventory = async () => {
         const snapshot = query(collection(firestore, 'inventory'))
@@ -98,6 +105,9 @@ export default function Home() {
     const handleEditClose = () => setEdit(false)
 
   return ( 
+    <ThemeProvider theme={theme}>
+        <CssBaseline />
+
   <Box width="100vw" 
     height="100vh" 
     display="flex" 
@@ -194,7 +204,7 @@ export default function Home() {
             onChange={(e)=> {
                 searchItems(e.target.value)
             }}
-        
+            fullWidth 
         />
 
         <Button variant="contained" onClick={() => {
@@ -206,9 +216,9 @@ export default function Home() {
 
     <Box border="1px solid #333">
         <Box
-            width="800px" 
+            width="1000px" 
             height="100px" 
-            bgcolor="#ADDBE6" 
+            bgcolor={purple[200]} 
             display="flex" 
             alignItems="center" 
             justifyContent="center"
@@ -217,9 +227,9 @@ export default function Home() {
         </Box>
 
     <Stack 
-        width="800px" 
-        height="300px" 
-        spacing={2} 
+        width="100%" 
+        height="800px" 
+        // spacing={2} 
         overflow="auto"
     >
         {searchResults.map(({name, quantity}) => (
@@ -283,5 +293,6 @@ export default function Home() {
     </Stack>
     </Box>
   </Box>
+  </ThemeProvider>
   );
 }
