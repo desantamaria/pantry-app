@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from "react";
 import { firestore } from "@/firebase";
-import { Box, Button, createTheme, CssBaseline, Modal, Stack, TextField, ThemeProvider, Typography } from "@mui/material";
+import { Box, Button, createTheme, CssBaseline, Grid, Modal, Stack, TextField, ThemeProvider, Typography } from "@mui/material";
 import { collection, deleteDoc, doc, getDoc, getDocs, query, setDoc } from "firebase/firestore";
 import { purple } from "@mui/material/colors";
 
@@ -214,7 +214,9 @@ export default function Home() {
         </Button>
     </Box>
 
-    <Box border="1px solid #333">
+    <Box 
+        border="1px solid #333"
+    >
         <Box
             width="1000px" 
             height="100px" 
@@ -224,6 +226,26 @@ export default function Home() {
             justifyContent="center"
         >
             <Typography variant="h2" color="#333">Inventory Items</Typography>
+        </Box>
+        
+        <Box                 
+            width="1000px"
+            height="60px"
+            bgcolor={purple[100]} 
+            display="flex"
+            alignItems="center"
+        >
+            <Grid container>
+                <Grid xs={6}>
+                    <Typography variant="h4" textAlign="center" >Name</Typography>
+                </Grid>
+                <Grid xs={2}>
+                    <Typography variant="h4" textAlign="center" >Quantity</Typography>
+                </Grid>
+                <Grid xs={4}>
+                </Grid>
+            </Grid>
+
         </Box>
 
     <Stack 
@@ -237,26 +259,36 @@ export default function Home() {
                 key={name} 
                 width="100%"
                 minHeight="150px"
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
                 bgcolor="#f0f0f0"
                 padding={5}
             >
+                <Grid 
+                    container
+                    spacing={2}
+                    display="flex"
+                    alignItems="center"
+                >
+                <Grid xs={6}>   
                 <Typography 
-                    variant="h3" 
+                    variant="h4" 
                     color="#333"
                     textAlign="center"                    
                 >
                     {name.charAt(0).toUpperCase() + name.slice(1)}
                 </Typography>
+                </Grid>
+
+                <Grid xs={2}>
                 <Typography 
-                    variant="h3" 
+                    variant="h4" 
                     color="#333"
                     textAlign="center"                    
                 >
                     {quantity}
                 </Typography>
+                </Grid>
+
+                <Grid xs={4}>
                 <Stack direction="row" spacing={2}>
                 <Button
                     variant="contained"
@@ -286,7 +318,8 @@ export default function Home() {
                 </Button>
 
                 </Stack>
-
+                </Grid>
+                </Grid>
                 
             </Box>
         ))}
