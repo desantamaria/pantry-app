@@ -225,12 +225,12 @@ export default function Home() {
             alignItems="center" 
             justifyContent="center"
         >
-            <Typography variant="h2" color="#333">Inventory Items</Typography>
+            <Typography variant="h2" color="#75006E">Inventory Items</Typography>
         </Box>
         
         <Box                 
             width="1000px"
-            height="60px"
+            height="70px"
             bgcolor={purple[100]} 
             display="flex"
             alignItems="center"
@@ -250,7 +250,7 @@ export default function Home() {
 
     <Stack 
         width="100%" 
-        height="800px" 
+        maxHeight="700px" 
         // spacing={2} 
         overflow="auto"
     >
@@ -261,12 +261,13 @@ export default function Home() {
                 minHeight="150px"
                 bgcolor="#f0f0f0"
                 padding={5}
+                display="flex"
+                alignItems="center"
             >
                 <Grid 
                     container
                     spacing={2}
-                    display="flex"
-                    alignItems="center"
+
                 >
                 <Grid xs={6}>   
                 <Typography 
