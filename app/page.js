@@ -1,9 +1,10 @@
 'use client'
 import { useState, useEffect } from "react";
 import { firestore } from "@/firebase";
-import { Box, Button, createTheme, CssBaseline, Grid, Modal, Stack, TextField, ThemeProvider, Typography } from "@mui/material";
+import { Box, Button, createTheme, CssBaseline, Grid, IconButton, Modal, Stack, TextField, ThemeProvider, Typography } from "@mui/material";
 import { collection, deleteDoc, doc, getDoc, getDocs, query, setDoc } from "firebase/firestore";
 import { purple } from "@mui/material/colors";
+import SwapVertIcon from '@mui/icons-material/SwapVert';
 
 export default function Home() {
     const [inventory, setInventory] = useState([])
@@ -15,6 +16,8 @@ export default function Home() {
     const [newItemName, setNewItemName] = useState('')
 
     const [searchResults, setSearchResults] = useState([]);
+
+    const [sortState, setSortState] = useState("");
 
     const theme = createTheme({
         palette: {
@@ -34,6 +37,7 @@ export default function Home() {
                 ...doc.data()
             })
         })
+        console.log(inventoryList)
         setInventory(inventoryList)
         setSearchResults(inventoryList)
     }
@@ -48,6 +52,33 @@ export default function Home() {
             setSearchResults(inventory)
         }
     }
+
+    const sortByQuantity = () => {
+        handleSortToggle()
+        const sortedSearchResults = searchResults.slice().sort((a, b) => {
+            if (sortState === 'ascending') {
+              return a.quantity - b.quantity;
+            } else {
+              return b.quantity - a.quantity;
+            }
+          })
+
+          setSearchResults(sortedSearchResults);
+
+    }
+
+    const handleSortToggle = () => {
+        switch (sortState) {
+          case "descending":
+            setSortState("ascending");
+            break;
+          case "ascending":
+            setSortState("descending");
+            break;
+          default:
+            setSortState("ascending");
+        }
+    };
 
     const addItem = async (item) => {
         const docRef = doc(collection(firestore, 'inventory'), item)
@@ -239,8 +270,15 @@ export default function Home() {
                 <Grid xs={6}>
                     <Typography variant="h4" textAlign="center" >Name</Typography>
                 </Grid>
-                <Grid xs={2}>
+                <Grid 
+                    xs={2}
+                    display="flex"
+                    gap={2}
+                >
                     <Typography variant="h4" textAlign="center" >Quantity</Typography>
+                    <IconButton aria-label="swapvert" size="large">
+                        <SwapVertIcon fontSize="inherit" onClick={()=>{sortByQuantity()}}/>
+                    </IconButton>
                 </Grid>
                 <Grid xs={4}>
                 </Grid>
